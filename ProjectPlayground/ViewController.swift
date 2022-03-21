@@ -8,12 +8,26 @@
 import UIKit
 
 class ViewController: UIViewController {
+    let firstThread = DispatchQueue(label: "first")
+    let secondThread = DispatchQueue(label: "second")
+    let loadSemaphore = DispatchSemaphore(value: 0)
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        // Do any additional setup after loading the view.
+        
+        secondThread.asyncAfter(deadline: .now() + 3) {
+            print("First queue is done!")
+            self.loadSemaphore.signal()
+        }
+        
+        print("uuuuu")
+
+        firstThread.async {
+            self.loadSemaphore.wait()
+            print("wo!")
+            print("wi!")
+        }
+        
+        print("iiiii")
     }
-
-
 }
-
