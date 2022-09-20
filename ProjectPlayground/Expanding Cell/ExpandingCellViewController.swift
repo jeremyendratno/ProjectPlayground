@@ -16,18 +16,20 @@ class ExpandingCellViewController: UIViewController {
         expandingTableView.dataSource = self
         expandingTableView.delegate = self
         expandingTableView.rowHeight = UITableView.automaticDimension
-        expandingTableView.estimatedRowHeight = 100
+        expandingTableView.estimatedRowHeight = 50
     }
 }
 
 extension ExpandingCellViewController: UITableViewDataSource, UITableViewDelegate {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return 5
+        return 20
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = expandingTableView.dequeueReusableCell(withIdentifier: "cell", for: indexPath) as! ExpandingTableViewCell
-        cell.titleLabel.text = ""
+        cell.titleLabel.text = "index: \(indexPath)"
+        cell.data = ["test", "testtesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttest", "testtesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttest", "testtest", "testtesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttest","testtesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttest","testtesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttest","testtesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttest","testtesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttest",]
+        cell.insideTableView.reloadData()
         return cell
     }
     
@@ -44,24 +46,26 @@ extension ExpandingCellViewController: UITableViewDataSource, UITableViewDelegat
             cell.insideTableViewHeight.constant = cell.insideTableView.contentSize.height
             UIView.animate(withDuration: 0.5) {
                 self.expandingTableView.performBatchUpdates(nil)
+                self.expandingTableView.selectRow(at: indexPath, animated: true, scrollPosition: .top)
             }
-            
-            DispatchQueue.main.asyncAfter(deadline: .now() + 0.25) {
-                if cell.insideTableViewHeight.constant != cell.insideTableView.contentSize.height {
-                    cell.insideTableViewHeight.constant = cell.insideTableView.contentSize.height
-                    UIView.animate(withDuration: 0.5) {
-                        self.expandingTableView.performBatchUpdates(nil)
-                    }
-                }
-            }
+
+//            DispatchQueue.main.asyncAfter(deadline: .now() + 0.25) {
+//                if cell.insideTableViewHeight.constant != cell.insideTableView.contentSize.height {
+//                    cell.insideTableViewHeight.constant = cell.insideTableView.contentSize.height
+//                    UIView.animate(withDuration: 0.5) {
+//                        self.expandingTableView.performBatchUpdates(nil)
+//                    }
+//                }
+//            }
         }
     }
     
     func tableView(_ tableView: UITableView, didDeselectRowAt indexPath: IndexPath) {
-        let cell = expandingTableView.cellForRow(at: indexPath) as! ExpandingTableViewCell
-        cell.insideTableViewHeight.constant = 0
-        UIView.animate(withDuration: 0.5) {
-            self.expandingTableView.performBatchUpdates(nil)
+        if let cell = expandingTableView.cellForRow(at: indexPath) as? ExpandingTableViewCell {
+            cell.insideTableViewHeight.constant = 0
+            UIView.animate(withDuration: 0.5) {
+                self.expandingTableView.performBatchUpdates(nil)
+            }
         }
     }
 }

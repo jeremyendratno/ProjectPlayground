@@ -11,7 +11,7 @@ class ExpandingTableViewCell: UITableViewCell {
     @IBOutlet weak var titleLabel: UILabel!
     @IBOutlet weak var insideTableView: UITableView!
     @IBOutlet weak var insideTableViewHeight: NSLayoutConstraint!
-    var height: Int = 0
+    var data: [String] = []
     
     override func awakeFromNib() {
         super.awakeFromNib()
@@ -25,23 +25,12 @@ class ExpandingTableViewCell: UITableViewCell {
 
 extension ExpandingTableViewCell: UITableViewDataSource, UITableViewDelegate {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        5
+        return data.count
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = insideTableView.dequeueReusableCell(withIdentifier: "cell", for: indexPath) as! InsideTableViewCell
-        
-        if indexPath.row == 1 {
-            cell.titleLabel.text = "testtesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttest"
-        } else if indexPath.row == 3 {
-            cell.titleLabel.text = "testtesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttest"
-        } else {
-            cell.titleLabel.text = "testtesttesttest"
-        }
-        
-        if indexPath.row == 4 {
-            cell.separatorInset = UIEdgeInsets(top: 0, left: 10000, bottom: 0, right: 0)
-        }
+        cell.titleLabel.text = data[indexPath.row]
         
         return cell
     }
